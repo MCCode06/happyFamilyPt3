@@ -1,14 +1,34 @@
+
 import java.util.Arrays;
 import java.util.Objects;
+import java.lang.ref.Cleaner;
+
 
 public class Family {
+
+    private static final Cleaner CLEANER = Cleaner.create();
+    private final Cleaner.Cleanable cleanable;
+
+    public Runnable finalizer() {
+        return () -> {
+            try {
+                System.out.println("Finalizer initiated...");
+            } catch (Throwable e) {
+                System.out.println("Exception in finalizer: " + e.getMessage());
+                throw e;
+            } finally {
+                System.out.println("Family is finalized.");
+            }
+        };
+    }
+
 
     static {
         System.out.println("Family class is loaded");
     }
 
     {
-        System.out.println("Family object is crated");
+        System.out.println("Family object is created");
     }
 
     private Human mother;
@@ -20,6 +40,8 @@ public class Family {
         this.mother = mother;
         this.father = father;
         this.children = new Human[0];
+        cleanable = CLEANER.register(this, this.finalizer());
+
     }
     public void addChild(Human child) {
         children = Arrays.copyOf(children, children.length + 1);
@@ -51,7 +73,7 @@ public class Family {
     }
 
     public boolean deleteChild(Human child) {
-        int index = 0;
+        int index = -1;
         for (int i = 0; i < children.length; i++) {
             if (children[i].equals(child)) {
                 index = i;

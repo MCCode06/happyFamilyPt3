@@ -1,15 +1,35 @@
+
 import java.util.Arrays;
 import java.util.Objects;
+import java.lang.ref.Cleaner;
 
 public class Pet {
+
+
+    private static final Cleaner CLEANER = Cleaner.create();
+    private final Cleaner.Cleanable cleanable;
+
+    public Runnable finalizer() {
+        return () -> {
+            try {
+                System.out.println("Finalizer initiated...");
+            } catch (Throwable e) {
+                System.out.println("Exception in finalizer: " + e.getMessage());
+                throw e;
+            } finally {
+                System.out.println("Pet is finalized.");
+            }
+        };
+    }
 
     static {
         System.out.println("Pet class is loaded");
     }
 
     {
-        System.out.println("Pet object is crated");
+        System.out.println("Pet object is created");
     }
+
 
     private String species;
     private String nickname;
@@ -17,11 +37,14 @@ public class Pet {
     private int age;
     private int trickLevel;
 
-    public Pet() {}
+    public Pet() {
+        cleanable = CLEANER.register(this, this.finalizer());
+    }
 
     public Pet(String species, String nickname) {
         this.species = species;
         this.nickname = nickname;
+        cleanable = CLEANER.register(this, this.finalizer());
     }
 
     public Pet(String species, String nickname, int age, int trickLevel, String[] habits) {
@@ -30,6 +53,7 @@ public class Pet {
         this.age = age;
         this.trickLevel = trickLevel;
         this.habits = habits;
+        cleanable = CLEANER.register(this, this.finalizer());
     }
 
 
@@ -104,5 +128,6 @@ public class Pet {
         result = 31 * result + age;
         return result;
     }
+
 }
 

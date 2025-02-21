@@ -2,27 +2,32 @@
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
+import java.lang.ref.Cleaner;
 
 public class Human {
+
+    private static final Cleaner CLEANER = Cleaner.create();
+    private final Cleaner.Cleanable cleanable;
+
+    public Runnable finalizer() {
+        return () -> {
+            try {
+                System.out.println("Finalizer initiated...");
+            } catch (Throwable e) {
+                System.out.println("Exception in finalizer: " + e.getMessage());
+                throw e;
+            } finally {
+                System.out.println("Human is finalized.");
+            }
+        };
+    }
 
     static {
         System.out.println("Human class is loaded");
     }
 
     {
-        System.out.println("Human object is crated");
-    }
-
-
-    protected void finalizer() {
-        try {
-            System.out.println("We're in finalizer...");
-            this.name = null;
-        } catch (Exception e) {
-            System.out.println("Exception of: " + e.getMessage());
-        } finally {
-            System.out.println("Finalizer execution completed.");
-        }
+        System.out.println("Human object is created");
     }
 
 
@@ -34,12 +39,15 @@ public class Human {
     private Family family;
 
 
-    public Human() {}
+    public Human() {
+        cleanable = CLEANER.register(this, this.finalizer());
+    }
 
     public Human(String name, String surname, int year) {
         this.name = name;
         this.surname = surname;
         this.year = year;
+        cleanable = CLEANER.register(this, this.finalizer());
     }
 
 
@@ -49,6 +57,7 @@ public class Human {
         this.year = year;
         this.iq = iq;
         this.schedule = schedule;
+        cleanable = CLEANER.register(this, this.finalizer());
     }
 
 
@@ -171,7 +180,6 @@ public class Human {
         result = 31 * result + iq;
         return result;
     }
-
 
 }
 
