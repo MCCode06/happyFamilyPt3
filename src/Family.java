@@ -44,9 +44,11 @@ public class Family {
 
     }
     public void addChild(Human child) {
-        children = Arrays.copyOf(children, children.length + 1);
-        children[children.length - 1] = child;
+        Human[] newChildren = new Human[children.length + 1];
+        newChildren = Arrays.copyOf(this.children, newChildren.length);
+        newChildren[newChildren.length - 1] = child;
         child.setFamily(this);
+        this.children = newChildren;
     }
 
     public boolean deleteChild(Human[] children, int index) {
@@ -77,7 +79,12 @@ public class Family {
         for (int i = 0; i < children.length; i++) {
             if (children[i].equals(child)) {
                 index = i;
+                break;
             }
+        }
+        if (index == -1) {
+            System.out.println("You are trying to delete a child that doesn't exist");
+            return false;
         }
 
         return deleteChild(children, index);

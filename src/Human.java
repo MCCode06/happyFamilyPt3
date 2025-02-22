@@ -30,7 +30,7 @@ public class Human {
         System.out.println("Human object is created");
     }
 
-
+    public static int count = 0;
     private String name;
     private String surname;
     private int year;
@@ -41,6 +41,7 @@ public class Human {
 
     public Human() {
         cleanable = CLEANER.register(this, this.finalizer());
+        count++;
     }
 
     public Human(String name, String surname, int year) {

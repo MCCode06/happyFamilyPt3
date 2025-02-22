@@ -5,7 +5,6 @@ import java.lang.ref.Cleaner;
 
 public class Pet {
 
-
     private static final Cleaner CLEANER = Cleaner.create();
     private final Cleaner.Cleanable cleanable;
 
@@ -31,23 +30,24 @@ public class Pet {
     }
 
 
-    private String species;
+    private Species species;
     private String nickname;
     private String[] habits;
     private int age;
     private int trickLevel;
 
     public Pet() {
+        this.species = Species.ANONYMOUS;
         cleanable = CLEANER.register(this, this.finalizer());
     }
 
-    public Pet(String species, String nickname) {
+    public Pet(Species species, String nickname) {
         this.species = species;
         this.nickname = nickname;
         cleanable = CLEANER.register(this, this.finalizer());
     }
 
-    public Pet(String species, String nickname, int age, int trickLevel, String[] habits) {
+    public Pet(Species species, String nickname, int age, int trickLevel, String[] habits) {
         this.species = species;
         this.nickname = nickname;
         this.age = age;
@@ -57,12 +57,10 @@ public class Pet {
     }
 
 
-    public void eat(){
-        System.out.println("I am eating...");
-    }
+    public void eat(){System.out.println("I am eating...");}
 
     public void respond() {
-        System.out.println("Hello, owner. I am " + this.species + ". I miss you!");
+        System.out.println("Hello, owner. I am " + this.nickname + ". I miss you!");
     }
 
     public void foul() {
@@ -70,7 +68,7 @@ public class Pet {
     }
 
     // Setters
-    public void setSpecies(String species) {
+    public void setSpecies(Species species) {
         this.species = species;
     }
     public void setNickname(String nickname) {
@@ -87,7 +85,7 @@ public class Pet {
     }
 
     // Getters
-    public String getSpecies() {
+    public Species getSpecies() {
         return species;
     }
     public String getNickname() {
@@ -107,8 +105,8 @@ public class Pet {
     @Override
     public String toString() {
         String habitsStr = Arrays.toString(habits);
-        return String.format("{Pet: %s, nickname = '%s', age = %d, trickLevel = %d, habits = %s}",
-                species, nickname, age, trickLevel, habitsStr);
+        return String.format("{Pet: %s, nickname = '%s', age = %d, trickLevel = %d, habits = %s, canFly = %b, numberOfLegs = %d, hasFur = %b}",
+                species, nickname, age, trickLevel, habitsStr, species.getCanFly(), species.getNumberOfLegs(), species.hasFur());
     }
 
     @Override
