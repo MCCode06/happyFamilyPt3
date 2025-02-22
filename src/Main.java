@@ -4,15 +4,15 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
 
-        // after each 100 000 object, garbage collector is recommended manually
-//        for (int i = 0; i <= 1000000; i++){
-//            new Human("Eko", "Taghiyev", 1995);
-//            if(i % 100000 == 0){
-//                System.gc();
-//            }
-//        }
-//
-//        System.gc();
+    // after each 100 000 object, garbage collector is recommended manually
+        for (int i = 0; i <= 1000000; i++){
+            new Human("Eko", "Taghiyev", 1995);
+            if(i % 100000 == 0){
+                System.gc();
+            }
+        }
+
+        System.gc();
 
 
 //        String[][] annaSchedule = {
