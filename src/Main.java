@@ -5,14 +5,14 @@ public class Main {
     public static void main(String[] args) {
 
         // after each 100 000 object, garbage collector is recommended manually
-        for (int i = 0; i <= 1000000; i++){
-            new Human("Eko", "Taghiyev", 1995);
-            if(i % 100000 == 0){
-                System.gc();
-            }
-        }
-
-        System.gc();
+//        for (int i = 0; i <= 1000000; i++){
+//            new Human("Eko", "Taghiyev", 1995);
+//            if(i % 100000 == 0){
+//                System.gc();
+//            }
+//        }
+//
+//        System.gc();
 
 
 //        String[][] annaSchedule = {
@@ -29,7 +29,7 @@ public class Main {
 //        Human father = new Human("Alexei", "Karenin", 1829);
 //
 //        Family family = new Family(mother, father);
-//
+
 //        Human son = new Human("Sergei", "Karenin", 1869);
 //        Human daughter = new Human("Annie", "Karenina", 1876);
 //        family.addChild(son);
@@ -62,6 +62,32 @@ public class Main {
 //
 //
 //        System.gc();
+        Human mother;
+        Human father;
+        Family family;
+        String[][] schedule1;
+        Human child1;
+        Human child2;
+        Human child3;
+
+        mother = new Human("X","X",1983);
+        father = new Human("X","Y",1977);
+        family = new Family(mother,father);
+        schedule1 = new String[][]{
+                {DayOfWeek.MONDAY.name(),"sleep"},
+                {DayOfWeek.TUESDAY.name(),"drink beer"},
+                {DayOfWeek.THURSDAY.name(),"do drugs"},
+                {DayOfWeek.FRIDAY.name(),"party"}};
+        child1 = new Human("Sanka","Zeynalli",2006,120,schedule1);
+        child2 = new Human("Xaqan","Zeynalli",2005, 115,schedule1);
+        child3 = new Human("Nigga","Zeynalli",2010);
+        System.out.println(child1.toString());
+
+        family.addChild(child1);
+        family.setPet(new Pet(Species.DOG, "Qazo"));
+        System.out.println(family.toString());
+
+
 
     }
 }
